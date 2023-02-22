@@ -48,6 +48,9 @@ public class Persona {
     @OneToMany(mappedBy = "personaTel")
     private ArrayList<Telefono> telefonos;
     
+    @OneToMany(mappedBy = "personaExp")
+    private ArrayList<Experiencia> experiencias;
+    
     /*
     ManyToOne va en la entidad "muchos" (Persona)
     y es el owning side, creo que es porque en la bd, la tabla que tiene la clave foranea es la tabla del muchos
