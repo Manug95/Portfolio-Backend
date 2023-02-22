@@ -8,8 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,18 +30,32 @@ public class Persona {
     @Column(name = "id_persona")
     private int idPersona;
     
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 45)
     private String nombre;
     
-    @Column(name = "apellido")
+    @Column(name = "apellido", length = 45)
     private String apellido;
     
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
     
+    @OneToOne(mappedBy = "personaUser")
+    private Usuario usuario;
+    
+    @OneToMany(mappedBy = "personaEmail")
+    private ArrayList<Email> emails;
+    
+    @OneToMany(mappedBy = "personaTel")
+    private ArrayList<Telefono> telefonos;
+    
+    /*
+    ManyToOne va en la entidad "muchos" (Persona)
+    y es el owning side, creo que es porque en la bd, la tabla que tiene la clave foranea es la tabla del muchos
+    */
     @ManyToOne
-    @JoinColumn(name="id_persona", nullable=false)
-    private Domicilio domicilio;
+    //JoinColumn va en la entidad que va a tener la columna con la clave foranea
+    @JoinColumn(name="id_domicilio", nullable=false) //hago referencia a la id de la entidad "uno" OneToMany(Domicilio)
+    private Domicilio domicilio; // el mappedBy del ArrayList que esta en Domicilio se tiene que llamar como este atributo
 
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
     

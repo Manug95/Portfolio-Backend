@@ -6,7 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,11 +28,18 @@ public class Domicilio {
     @Column(name = "id_domicilio")
     private int idDomicilio;
     
-    @Column(name = "calle")
+    @Column(name = "calle", length = 50)
     private String calle;
     
     @Column(name = "altura")
     private int altura;
+    
+    @OneToMany(mappedBy = "domicilio") // mappedBy tiene que llamarse como el atributo tipo Domicilio que tiene Persona
+    private ArrayList<Persona> personas;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_localidad", nullable = false)
+    private Localidad localidad;
 
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
     
@@ -39,11 +50,52 @@ public class Domicilio {
         this.calle = calle;
         this.altura = altura;
     }
+    
+    public Domicilio(String calle, int altura, ArrayList<Persona> personas) {
+        this.calle = calle;
+        this.altura = altura;
+        this.personas = personas;
+    }
+    
+    public Domicilio(String calle, int altura, Localidad localidad) {
+        this.calle = calle;
+        this.altura = altura;
+        this.localidad = localidad;
+    }
+    
+    public Domicilio(String calle, int altura, ArrayList<Persona> personas, Localidad localidad) {
+        this.calle = calle;
+        this.altura = altura;
+        this.personas = personas;
+        this.localidad = localidad;
+    }
 
     public Domicilio(int idDomicilio, String calle, int altura) {
         this.idDomicilio = idDomicilio;
         this.calle = calle;
         this.altura = altura;
+    }
+    
+    public Domicilio(int idDomicilio, String calle, int altura, ArrayList<Persona> personas) {
+        this.idDomicilio = idDomicilio;
+        this.calle = calle;
+        this.altura = altura;
+        this.personas = personas;
+    }
+    
+    public Domicilio(int idDomicilio, String calle, int altura, Localidad localidad) {
+        this.idDomicilio = idDomicilio;
+        this.calle = calle;
+        this.altura = altura;
+        this.localidad = localidad;
+    }
+    
+    public Domicilio(int idDomicilio, String calle, int altura, ArrayList<Persona> personas, Localidad localidad) {
+        this.idDomicilio = idDomicilio;
+        this.calle = calle;
+        this.altura = altura;
+        this.personas = personas;
+        this.localidad = localidad;
     }
     
 }
