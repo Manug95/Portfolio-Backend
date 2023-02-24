@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +33,7 @@ public class Localidad {
     private String nombre;
     
     @OneToMany(mappedBy = "localidad")
-    private ArrayList<Domicilio> domicilios;
+    private List<Domicilio> domicilios;
     
     @ManyToOne
     @JoinColumn(name = "id_provincia", nullable = false)

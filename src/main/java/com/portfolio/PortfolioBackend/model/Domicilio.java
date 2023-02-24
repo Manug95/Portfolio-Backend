@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +36,7 @@ public class Domicilio {
     private int altura;
     
     @OneToMany(mappedBy = "domicilio") // mappedBy tiene que llamarse como el atributo tipo Domicilio que tiene Persona
-    private ArrayList<Persona> personas;
+    private List<Persona> personas;
     
     @ManyToOne
     @JoinColumn(name = "id_localidad", nullable = false)
