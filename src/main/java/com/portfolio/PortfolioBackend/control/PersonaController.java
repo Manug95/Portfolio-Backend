@@ -38,13 +38,15 @@ public class PersonaController {
         
     }
     
-    @PostMapping("/crear")
-    public @ResponseBody ResponseEntity<String> crearPersona(@RequestBody PersonaDTO persona) {
+    @PostMapping("/crear")  //POR EL MOMENTO ESTE METODO NO SE VA A USAR
+    public @ResponseBody ResponseEntity<String> crearPersona(@RequestBody PersonaDTO persona, @RequestParam int idUsuario) {
         
-        if (this.persoServ.crearPersona(persona)) {
-            return new ResponseEntity<>("Persona guardada", HttpStatus.CREATED);
+        int id = this.persoServ.crearPersona(idUsuario, persona);
+        
+        if (id != -1) {
+            return new ResponseEntity<>("Persona guardada - " + id, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("No se pudo guardar la persona", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No se pudo guardar la persona - " + id, HttpStatus.BAD_REQUEST);
         }
         
     }

@@ -77,13 +77,17 @@ public class Persona {
     public Persona() {
     }
 
+    public Persona(Integer idPersona) {
+        this.idPersona = idPersona;
+    }
+
     public Persona(String nombre, String apellido, LocalDate fechaNacimiento) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Persona(Integer idPersona, String nombre, String apellido, LocalDate fechaNacimiento) {
+    public Persona(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;

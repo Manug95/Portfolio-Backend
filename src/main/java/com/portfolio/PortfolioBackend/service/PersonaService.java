@@ -18,50 +18,79 @@ public class PersonaService implements IPersonaService {
     @Autowired
     private PersonaRepository persoRepo;
     
+//    @Autowired
+//    private IUsuarioService userServ;
+    
     //--------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * crea una nueva persona y la guarda en la BD
+     * @param persona datos de la persona nueva
+     * @return la ID de la persona nueva
+     */
     @Override
-    public boolean crearPersona(PersonaDTO persona) {
+    public int crearPersona(int idUsuario, PersonaDTO persona) {  //POR EL MOMENTO ESTE METODO NO SE VA A USAR
         
-        if(persona != null) {
-            Persona p = new Persona(
-                //persona.getIdPersona(),
-                persona.getNombre(),
-                persona.getApellido(),
-                persona.getFechaNacimiento()
-            );
-        
-            this.persoRepo.save(p);
-            
-            return true;
-        } else {
-            return false;
+        try {
+            if(persona != null) {
+                Persona p = new Persona(
+                    //persona.getIdPersona(),
+                    persona.getNombre(),
+                    persona.getApellido(),
+                    persona.getFechaNacimiento()
+                );
+
+                Persona personaGenerada = this.persoRepo.save(p);
+                
+                //this.userServ.enlazarPersona(idUsuario, personaGenerada.getIdPersona());
+
+                return personaGenerada.getIdPersona();
+            } else {
+                return -1;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return -1;
         }
         
     }
 
+    /**
+     * Trae una persona dada una ID
+     * @param id de la persona
+     * @return la persona si es encontrada, si no, null
+     */
     @Override
     public PersonaDTO traerPersona(int id) {
         
-        Persona p = this.persoRepo.findById(id).orElse(null);
+        try {
+            Persona p = this.persoRepo.findById(id).orElse(null);
         
-        if(p != null) {
-            
-//            String nombre = p.getNombre();
-//            String apellido = p.getApellido();
-//            LocalDate fechaNac = p.getFechaNacimiento();
-//            Integer idDomicilio = p.getDomicilio().getIdDomicilio();
-            
-            PersonaDTO persoRespuesta = new PersonaDTO(
-                p.getIdPersona(),
-                p.getNombre(),
-                p.getApellido(),
-                p.getFechaNacimiento(),
-                p.getDomicilio().getIdDomicilio()
-            );
-        
-            return persoRespuesta;
-        }else {
+            if(p != null) {
+
+    //            String nombre = p.getNombre();
+    //            String apellido = p.getApellido();
+    //            LocalDate fechaNac = p.getFechaNacimiento();
+    //            Integer idDomicilio = p.getDomicilio().getIdDomicilio();
+
+                PersonaDTO persoRespuesta = new PersonaDTO(
+                    p.getIdPersona(),
+                    p.getNombre(),
+                    p.getApellido(),
+                    p.getFechaNacimiento(),
+                    p.getDomicilio().getIdDomicilio()
+                );
+
+                return persoRespuesta;
+            }else {
+                return null;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             return null;
         }
         
@@ -84,10 +113,20 @@ public class PersonaService implements IPersonaService {
         
     }
 
+    /**
+     * borra una persona en la BD dada una ID
+     * @param id de la persona a borrar
+     */
     @Override
     public void eliminarPersona(int id) {
         
-        this.persoRepo.deleteById(id);
+        try {
+            this.persoRepo.deleteById(id);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
         
     }
 
