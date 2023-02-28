@@ -2,15 +2,21 @@
 package com.portfolio.PortfolioBackend.service;
 
 import com.portfolio.PortfolioBackend.dto.DomicilioDTO;
+import com.portfolio.PortfolioBackend.dto.EmailDTO;
 import com.portfolio.PortfolioBackend.dto.LocalidadDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
 import com.portfolio.PortfolioBackend.dto.ProvinciaDTO;
+import com.portfolio.PortfolioBackend.dto.TelefonoDTO;
 import com.portfolio.PortfolioBackend.model.Domicilio;
+import com.portfolio.PortfolioBackend.model.Email;
 import com.portfolio.PortfolioBackend.model.Localidad;
 import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.Provincia;
+import com.portfolio.PortfolioBackend.model.Telefono;
 import com.portfolio.PortfolioBackend.repository.PersonaRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +35,12 @@ public class PersonaService implements IPersonaService {
     
     @Autowired
     private DomicilioService domiServ;
+    
+    @Autowired
+    private EmailService emailServ;
+    
+    @Autowired
+    private TelefonoService telServ;
     
 //    @Autowired
 //    private IUsuarioService userServ;
@@ -75,6 +87,10 @@ public class PersonaService implements IPersonaService {
                 );
 
                 Persona personaGenerada = this.persoRepo.save(p);
+                
+                this.emailServ.guardarEmails(persona.getEmails(), personaGenerada);
+                
+                this.telServ.guardarTelefonos(persona.getTelefonos(), personaGenerada);
 
                 return personaGenerada.getIdPersona();
             } else {
@@ -120,12 +136,36 @@ public class PersonaService implements IPersonaService {
                         p.getDomicilio().getAltura(),
                         localidad
                 );
-
+                
+                ArrayList<EmailDTO> emails = new ArrayList<>();
+                List<Email> listaEmailBD = p.getEmails();
+                if (!listaEmailBD.isEmpty()) {
+                    for(Email e : listaEmailBD) {
+                        emails.add(new EmailDTO(
+                                e.getEmail(),
+                                p.getIdPersona()
+                        ));
+                    }
+                }
+                
+                ArrayList<TelefonoDTO> telefonos = new ArrayList<>();
+                List<Telefono> listaTelBD = p.getTelefonos();
+                if (!listaTelBD.isEmpty()) {
+                    for(Telefono tel : listaTelBD) {
+                        telefonos.add(new TelefonoDTO(
+                                tel.getTelefono(),
+                                p.getIdPersona()
+                        ));
+                    }
+                }
+                
                 PersonaDTO persona = new PersonaDTO(
                     p.getIdPersona(),
                     p.getNombre(),
                     p.getApellido(),
                     p.getFechaNacimiento(),
+                    emails,
+                    telefonos,
                     domicilio
                 );
 

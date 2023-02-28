@@ -68,7 +68,7 @@ public class Persona {
     */
     @ManyToOne
     //JoinColumn va en la entidad que va a tener la columna con la clave foranea
-    @JoinColumn(name="id_domicilio", nullable=true) //hago referencia a la id de la entidad "uno" OneToMany(Domicilio)
+    @JoinColumn(name="id_domicilio", nullable=true) //id_domicilio va a ser el nombre del campo con la FK del domicilio en la tabla persona
     private Domicilio domicilio; // el mappedBy del ArrayList que esta en Domicilio se tiene que llamar como este atributo
 
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
@@ -105,6 +105,16 @@ public class Persona {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
+        this.domicilio = domicilio;
+    }
+
+    public Persona(Integer idPersona, String nombre, String apellido, LocalDate fechaNacimiento, List<Email> emails, List<Telefono> telefonos, Domicilio domicilio) {
+        this.idPersona = idPersona;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.emails = emails;
+        this.telefonos = telefonos;
         this.domicilio = domicilio;
     }
     
