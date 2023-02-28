@@ -14,7 +14,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,10 +32,10 @@ public class Persona {
     @Column(name = "id_persona")
     private Integer idPersona;
     
-    @Column(name = "nombre", length = 45, nullable=false)
+    @Column(name = "nombre", length = 45)
     private String nombre;
     
-    @Column(name = "apellido", length = 45, nullable=false)
+    @Column(name = "apellido", length = 45)
     private String apellido;
     
     @Column(name = "fecha_nacimiento")
@@ -69,7 +68,7 @@ public class Persona {
     */
     @ManyToOne
     //JoinColumn va en la entidad que va a tener la columna con la clave foranea
-    @JoinColumn(name="id_domicilio"/*, nullable=false*/) //hago referencia a la id de la entidad "uno" OneToMany(Domicilio)
+    @JoinColumn(name="id_domicilio", nullable=true) //hago referencia a la id de la entidad "uno" OneToMany(Domicilio)
     private Domicilio domicilio; // el mappedBy del ArrayList que esta en Domicilio se tiene que llamar como este atributo
 
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
@@ -87,11 +86,26 @@ public class Persona {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public Persona(String nombre, String apellido, LocalDate fechaNacimiento, Domicilio domicilio) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.domicilio = domicilio;
+    }
+
     public Persona(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Persona(Integer idPersona, String nombre, String apellido, LocalDate fechaNacimiento, Domicilio domicilio) {
+        this.idPersona = idPersona;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.domicilio = domicilio;
     }
     
 }

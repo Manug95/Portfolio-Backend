@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,10 +39,15 @@ public class PersonaController {
         
     }
     
-    @PostMapping("/crear")  //POR EL MOMENTO ESTE METODO NO SE VA A USAR
-    public @ResponseBody ResponseEntity<String> crearPersona(@RequestBody PersonaDTO persona, @RequestParam int idUsuario) {
+    /**
+     * 
+     * @param persona
+     * @return 
+     */
+    @PutMapping("/crear")
+    public @ResponseBody ResponseEntity<String> inicializarPersona(@RequestBody PersonaDTO persona/*, @RequestParam int idUsuario*/) {
         
-        int id = this.persoServ.crearPersona(idUsuario, persona);
+        int id = this.persoServ.inicializarPersona(/*idUsuario, */persona);
         
         if (id != -1) {
             return new ResponseEntity<>("Persona guardada - " + id, HttpStatus.CREATED);

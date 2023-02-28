@@ -1,8 +1,14 @@
 
 package com.portfolio.PortfolioBackend.service;
 
+import com.portfolio.PortfolioBackend.dto.DomicilioDTO;
+import com.portfolio.PortfolioBackend.dto.LocalidadDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
+import com.portfolio.PortfolioBackend.dto.ProvinciaDTO;
+import com.portfolio.PortfolioBackend.model.Domicilio;
+import com.portfolio.PortfolioBackend.model.Localidad;
 import com.portfolio.PortfolioBackend.model.Persona;
+import com.portfolio.PortfolioBackend.model.Provincia;
 import com.portfolio.PortfolioBackend.repository.PersonaRepository;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,31 +24,57 @@ public class PersonaService implements IPersonaService {
     @Autowired
     private PersonaRepository persoRepo;
     
+    @Autowired
+    private LocalidadService localServ;
+    
+    @Autowired
+    private DomicilioService domiServ;
+    
 //    @Autowired
 //    private IUsuarioService userServ;
     
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * crea una nueva persona y la guarda en la BD
+     * guarda los datos de la persona que se creo cuando se creo el usuario
      * @param persona datos de la persona nueva
      * @return la ID de la persona nueva
      */
     @Override
-    public int crearPersona(int idUsuario, PersonaDTO persona) {  //POR EL MOMENTO ESTE METODO NO SE VA A USAR
+    public int inicializarPersona(/*int idUsuario, */PersonaDTO persona) {
         
         try {
             if(persona != null) {
+                
+                Provincia provincia = new Provincia(
+                        persona.getDomicilio().getLocalidad().getProvincia().getIdProvincia(),
+                        persona.getDomicilio().getLocalidad().getProvincia().getNombre()
+                );
+                
+                Localidad localidad = new Localidad(
+                        persona.getDomicilio().getLocalidad().getNombre(),
+                        provincia
+                );
+                
+                this.localServ.guardarLocalidad(localidad);
+                
+                Domicilio domicilio = new Domicilio(
+                        persona.getDomicilio().getCalle(),
+                        persona.getDomicilio().getAltura(),
+                        localidad
+                );
+                
+                this.domiServ.guardarDomicilio(domicilio);
+                
                 Persona p = new Persona(
-                    //persona.getIdPersona(),
+                    persona.getIdPersona(),
                     persona.getNombre(),
                     persona.getApellido(),
-                    persona.getFechaNacimiento()
+                    persona.getFechaNacimiento(),
+                        domicilio
                 );
 
                 Persona personaGenerada = this.persoRepo.save(p);
-                
-                //this.userServ.enlazarPersona(idUsuario, personaGenerada.getIdPersona());
 
                 return personaGenerada.getIdPersona();
             } else {
@@ -50,8 +82,9 @@ public class PersonaService implements IPersonaService {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("----------------------Error al guardar la Persona------------------------");
             System.out.println(e.getMessage());
+            System.out.println("-------------------------------------------------------------------------");
             return -1;
         }
         
@@ -69,21 +102,34 @@ public class PersonaService implements IPersonaService {
             Persona p = this.persoRepo.findById(id).orElse(null);
         
             if(p != null) {
+                
+                ProvinciaDTO provincia = new ProvinciaDTO(
+                        p.getDomicilio().getLocalidad().getProvincia().getIdProvincia(),
+                        p.getDomicilio().getLocalidad().getProvincia().getNombre()
+                );
+                
+                LocalidadDTO localidad = new LocalidadDTO(
+                        p.getDomicilio().getLocalidad().getIdLocalidad(),
+                        p.getDomicilio().getLocalidad().getNombre(),
+                        provincia
+                );
 
-    //            String nombre = p.getNombre();
-    //            String apellido = p.getApellido();
-    //            LocalDate fechaNac = p.getFechaNacimiento();
-    //            Integer idDomicilio = p.getDomicilio().getIdDomicilio();
+                DomicilioDTO domicilio = new DomicilioDTO(
+                        p.getDomicilio().getIdDomicilio(),
+                        p.getDomicilio().getCalle(),
+                        p.getDomicilio().getAltura(),
+                        localidad
+                );
 
-                PersonaDTO persoRespuesta = new PersonaDTO(
+                PersonaDTO persona = new PersonaDTO(
                     p.getIdPersona(),
                     p.getNombre(),
                     p.getApellido(),
                     p.getFechaNacimiento(),
-                    p.getDomicilio().getIdDomicilio()
+                    domicilio
                 );
 
-                return persoRespuesta;
+                return persona;
             }else {
                 return null;
             }

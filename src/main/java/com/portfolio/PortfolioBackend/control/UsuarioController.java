@@ -2,8 +2,8 @@
 
 package com.portfolio.PortfolioBackend.control;
 
+import com.portfolio.PortfolioBackend.dto.DatosLogin;
 import com.portfolio.PortfolioBackend.dto.UsuarioDTO;
-import com.portfolio.PortfolioBackend.dto.UsuarioPersonaDTO;
 import com.portfolio.PortfolioBackend.model.Usuario;
 import com.portfolio.PortfolioBackend.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +28,31 @@ public class UsuarioController {
     private IUsuarioService userServ;
     
     /**
-     * al crear el usuario se creara la persona, por lo que esta funcion debe recibir todos los datos
+     * Crea un nuevo usuario y una nueva persona con todos sus datos en null
+     * 
      * @param usuario son los datos del usuario y la persona
-     * @return la ID del usuario creado o -1 si no se pudo crear
+     * @return un objeto con los datos del usuario creado (idUsuario, nombreUsuario, idPersona), o si no, null
+     * 
+     * NOTA:
+     * Como un usuario es una persona y viceversa, idUsuario = idPersona, por lo que no seria necesario devolver la idPersona.
+     * por el momento lo dejo asi, devolviendo la idPersona...
      */
     @PostMapping("/crear")
-    public @ResponseBody ResponseEntity<Integer> crearUsuario(@RequestBody UsuarioPersonaDTO usuario) {
+    public @ResponseBody ResponseEntity<DatosLogin> crearUsuario(@RequestBody UsuarioDTO usuario) {
         
         try {
-            int id = this.userServ.crearUsuario(usuario);
+            DatosLogin datos = this.userServ.crearUsuario(usuario);
             
-            if (id != -1) {
-                return new ResponseEntity<>(id, HttpStatus.CREATED);
+            if (datos != null) {
+                return new ResponseEntity<>(datos, HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>(id, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
             }
         }
         catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(-1, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
     }

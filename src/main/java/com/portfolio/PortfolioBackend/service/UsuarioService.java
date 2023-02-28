@@ -2,9 +2,9 @@
 
 package com.portfolio.PortfolioBackend.service;
 
+import com.portfolio.PortfolioBackend.dto.DatosLogin;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
 import com.portfolio.PortfolioBackend.dto.UsuarioDTO;
-import com.portfolio.PortfolioBackend.dto.UsuarioPersonaDTO;
 import com.portfolio.PortfolioBackend.model.Domicilio;
 import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.Usuario;
@@ -26,35 +26,47 @@ public class UsuarioService implements IUsuarioService {
 //    @Autowired
 //    private IPersonaService persoServ;
     
+    /**
+     * 
+     * @param usuario
+     * @return -1 si el nombre de usuario existe
+     * @throws Exception 
+     */
     @Override
-    public int crearUsuario(UsuarioPersonaDTO usuario) throws Exception {
+    public DatosLogin crearUsuario(UsuarioDTO usuario) throws Exception {
         
         Usuario u = this.userRepo.existeUsuario(usuario.getNombreUsuario());
         
         if(u != null) {
-            return -1;
+            return null;
         }
         
-        Persona persona = new Persona(
-                usuario.getPersona().getNombre(),
-                usuario.getPersona().getApellido(),
-                usuario.getPersona().getFechaNacimiento()
-        );
-        
-        if (usuario.getPersona().getIdDomicilio() != null) {  //usuario.getPersona().getDomicilio() != null
-            persona.setDomicilio(new Domicilio());
-//            persona.setDomicilio(usuario.getPersona().getDomicilio());
-        }
+//        Persona persona = new Persona(
+//                usuario.getPersona().getNombre(),
+//                usuario.getPersona().getApellido(),
+//                usuario.getPersona().getFechaNacimiento()
+//        );
+//        
+//        if (usuario.getPersona().getIdDomicilio() != null) {  //usuario.getPersona().getDomicilio() != null
+//            persona.setDomicilio(new Domicilio());
+////            persona.setDomicilio(usuario.getPersona().getDomicilio());
+//        }
 
         Usuario nuevoUser = new Usuario(
                 usuario.getNombreUsuario(),
                 usuario.getContrasenia(),
-                persona
+                new Persona()
         );
 
         nuevoUser = this.userRepo.save(nuevoUser);
+        
+        DatosLogin datos = new DatosLogin(
+                nuevoUser.getIdUsuario(),
+                nuevoUser.getNombreUsuario(),
+                nuevoUser.getPersonaUser().getIdPersona()
+        );
 
-        return nuevoUser.getIdUsuario();
+        return datos;
         
     }
 

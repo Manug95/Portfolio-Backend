@@ -10,37 +10,34 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UsuarioPersonaDTO {
+public class DatosLogin {
 
     private int idUsuario;
     private String nombreUsuario;
-    private String contrasenia;
-    private PersonaDTO persona;
+    private int idPersona;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
-    public UsuarioPersonaDTO() {
-    }
-
-    public UsuarioPersonaDTO(String nombreUsuario, String contrasenia, PersonaDTO persona) {
-        this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
-        this.persona = persona;
-    }
-
-    public UsuarioPersonaDTO(int idUsuario, String nombreUsuario, String contrasenia, PersonaDTO persona) {
-        this.idUsuario = idUsuario;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
-        this.persona = persona;
+    public DatosLogin() {
     }
     
+    public DatosLogin(String nombreUsuario, int idPersona) {
+        this.nombreUsuario = nombreUsuario;
+        this.idPersona = idPersona;
+    }
+
+    public DatosLogin(int idUsuario, String nombreUsuario, int idPersona) {
+        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
+        this.idPersona = idPersona;
+    }
+
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + this.idUsuario;
+        hash = 17 * hash + this.idUsuario;
         return hash;
     }
 
@@ -55,7 +52,7 @@ public class UsuarioPersonaDTO {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UsuarioPersonaDTO other = (UsuarioPersonaDTO) obj;
+        final DatosLogin other = (DatosLogin) obj;
         return this.idUsuario == other.idUsuario;
     }
     

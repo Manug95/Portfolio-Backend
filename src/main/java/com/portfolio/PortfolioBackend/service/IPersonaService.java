@@ -8,7 +8,7 @@ import com.portfolio.PortfolioBackend.dto.PersonaDTO;
  */
 public interface IPersonaService {
     
-    public int crearPersona(int idUsuario, PersonaDTO persona);
+    public int inicializarPersona(/*int idUsuario, */PersonaDTO persona);
     
     public PersonaDTO traerPersona(int id);
     

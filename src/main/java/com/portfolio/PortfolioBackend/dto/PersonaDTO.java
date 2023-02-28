@@ -19,7 +19,7 @@ public class PersonaDTO {
     private String nombre;
     private String apellido;
     private LocalDate fechaNacimiento;
-    private Integer idDomicilio;
+    private DomicilioDTO domicilio;//aslgfsañghañjsgñasghñajkshgkjajksg
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -32,11 +32,11 @@ public class PersonaDTO {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public PersonaDTO(String nombre, String apellido, LocalDate fechaNacimiento, Integer idDomicilio) {
+    public PersonaDTO(String nombre, String apellido, LocalDate fechaNacimiento, DomicilioDTO idDomicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.idDomicilio = idDomicilio;
+        this.domicilio = domicilio;
     }
 
     public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento) {
@@ -46,12 +46,12 @@ public class PersonaDTO {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, Integer idDomicilio) {
+    public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, DomicilioDTO domicilio) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.idDomicilio = idDomicilio;
+        this.domicilio = domicilio;
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
