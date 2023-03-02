@@ -1,8 +1,11 @@
 
 package com.portfolio.PortfolioBackend.control;
 
+import com.portfolio.PortfolioBackend.dto.DomicilioDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
+import com.portfolio.PortfolioBackend.service.DomicilioService;
 import com.portfolio.PortfolioBackend.service.IPersonaService;
+import com.portfolio.PortfolioBackend.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +29,13 @@ public class PersonaController {
     @Autowired
     private IPersonaService persoServ;
     
+    @Autowired
+    private DomicilioService domiServ;
+    
     @GetMapping("/traer")
     public @ResponseBody ResponseEntity<PersonaDTO> traerPersona(@RequestParam int id) {
         
-        PersonaDTO personaRespuesta = this.persoServ.traerPersona(id);
+        PersonaDTO personaRespuesta = this.persoServ.traerPersonaDTO(id);
         
         if (personaRespuesta != null) {
             return new ResponseEntity<>(personaRespuesta, HttpStatus.CREATED);
@@ -60,6 +66,19 @@ public class PersonaController {
     @DeleteMapping("/eliminar")
     public void eliminarPersona(@RequestParam int id) {
         this.persoServ.eliminarPersona(id);
+    }
+    
+    @GetMapping("/domicilios/traer")
+    public @ResponseBody ResponseEntity<String> traerDomicilio(@RequestBody DomicilioDTO domicilio) {
+        
+        Integer id = this.domiServ.buscarDomicilio(domicilio);
+        
+        if (id != null) {
+            return new ResponseEntity<>("Domicilio encontrado - " + id, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No se pudo encontrar el domicilio - " + id, HttpStatus.BAD_REQUEST);
+        }
+        
     }
     
 }

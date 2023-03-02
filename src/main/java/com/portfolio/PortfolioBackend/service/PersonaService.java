@@ -58,33 +58,17 @@ public class PersonaService implements IPersonaService {
         try {
             if(persona != null) {
                 
-                Provincia provincia = new Provincia(
-                        persona.getDomicilio().getLocalidad().getProvincia().getIdProvincia(),
-                        persona.getDomicilio().getLocalidad().getProvincia().getNombre()
-                );
-                
-                Localidad localidad = new Localidad(
-                        persona.getDomicilio().getLocalidad().getNombre(),
-                        provincia
-                );
-                
-                this.localServ.guardarLocalidad(localidad);
-                
-                Domicilio domicilio = new Domicilio(
-                        persona.getDomicilio().getCalle(),
-                        persona.getDomicilio().getAltura(),
-                        localidad
-                );
-                
-                this.domiServ.guardarDomicilio(domicilio);
-                
-                Persona p = new Persona(
-                    persona.getIdPersona(),
-                    persona.getNombre(),
-                    persona.getApellido(),
-                    persona.getFechaNacimiento(),
-                        domicilio
-                );
+//                Domicilio domicilio = this.domiServ.guardarDomicilioPersona(persona.getDomicilio());
+//
+//                Persona p = new Persona(
+//                    persona.getIdPersona(),
+//                    persona.getNombre(),
+//                    persona.getApellido(),
+//                    persona.getFechaNacimiento(),
+//                        domicilio
+//                );
+
+                Persona p = this.transformarAPersona(persona);
 
                 Persona personaGenerada = this.persoRepo.save(p);
                 
@@ -107,72 +91,53 @@ public class PersonaService implements IPersonaService {
     }
 
     /**
-     * Trae una persona dada una ID
+     * Trae una persona dada una ID y la transforma en PersonaDTO
      * @param id de la persona
-     * @return la persona si es encontrada, si no, null
+     * @return la personaDTO si es encontrada, si no, null
      */
     @Override
-    public PersonaDTO traerPersona(int id) {
+    public PersonaDTO traerPersonaDTO(int id) {
         
         try {
             Persona p = this.persoRepo.findById(id).orElse(null);
         
             if(p != null) {
                 
-                ProvinciaDTO provincia = new ProvinciaDTO(
-                        p.getDomicilio().getLocalidad().getProvincia().getIdProvincia(),
-                        p.getDomicilio().getLocalidad().getProvincia().getNombre()
-                );
+                ArrayList<EmailDTO> emails = this.emailServ.transformarAListaEmailDTO(p.getEmails(), p.getIdPersona());
                 
-                LocalidadDTO localidad = new LocalidadDTO(
-                        p.getDomicilio().getLocalidad().getIdLocalidad(),
-                        p.getDomicilio().getLocalidad().getNombre(),
-                        provincia
-                );
-
-                DomicilioDTO domicilio = new DomicilioDTO(
-                        p.getDomicilio().getIdDomicilio(),
-                        p.getDomicilio().getCalle(),
-                        p.getDomicilio().getAltura(),
-                        localidad
-                );
+                ArrayList<TelefonoDTO> telefonos = this.telServ.transformarAListaTelefonoDTO(p.getTelefonos(), p.getIdPersona());
                 
-                ArrayList<EmailDTO> emails = new ArrayList<>();
-                List<Email> listaEmailBD = p.getEmails();
-                if (!listaEmailBD.isEmpty()) {
-                    for(Email e : listaEmailBD) {
-                        emails.add(new EmailDTO(
-                                e.getEmail(),
-                                p.getIdPersona()
-                        ));
-                    }
-                }
-                
-                ArrayList<TelefonoDTO> telefonos = new ArrayList<>();
-                List<Telefono> listaTelBD = p.getTelefonos();
-                if (!listaTelBD.isEmpty()) {
-                    for(Telefono tel : listaTelBD) {
-                        telefonos.add(new TelefonoDTO(
-                                tel.getTelefono(),
-                                p.getIdPersona()
-                        ));
-                    }
-                }
-                
-                PersonaDTO persona = new PersonaDTO(
-                    p.getIdPersona(),
-                    p.getNombre(),
-                    p.getApellido(),
-                    p.getFechaNacimiento(),
-                    emails,
-                    telefonos,
-                    domicilio
-                );
+                PersonaDTO persona = this.transformarAPersonaDTO(p);
+                persona.setEmails(emails);
+                persona.setTelefonos(telefonos);
 
                 return persona;
             }else {
                 return null;
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
+    }
+    
+    /**
+     * Trae una persona dada una ID
+     * @param id de la persona
+     * @return la persona si es encontrada, si no, null
+     */
+    @Override
+    public Persona traerPersona(int id) {
+        
+        Persona persona;
+        
+        try {
+            persona = this.persoRepo.findById(id).orElse(null);
+            
+            return persona;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -210,10 +175,76 @@ public class PersonaService implements IPersonaService {
             this.persoRepo.deleteById(id);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("----------------------Error al eliminar la persona------------------------");
             System.out.println(e.getMessage());
+            System.out.println("--------------------------------------------------------------------------");
         }
         
     }
 
+    @Override
+    public void cambiarDomicilio(DomicilioDTO domi, int idPersona) {
+        
+        Domicilio domicilio;
+        
+        try {
+            domicilio = this.domiServ.guardarDomicilioPersona(domi);
+            
+            Persona persona = this.traerPersona(idPersona);
+            
+            persona.setDomicilio(domicilio);
+            
+            this.persoRepo.save(persona);
+        }
+        catch (Exception e) {
+            System.out.println("----------------------Error al guardar la cambiar domicilio------------------------");
+            System.out.println(e.getMessage());
+            System.out.println("-----------------------------------------------------------------------------------");
+        }
+        
+    }
+
+    @Override
+    public Persona transformarAPersona(PersonaDTO p) {
+        
+        Persona persona = null;
+        
+        if (p != null) {
+            
+            Domicilio domicilio = this.domiServ.guardarDomicilioPersona(p.getDomicilio());
+            
+            persona = new Persona(
+                persona.getIdPersona(),
+                persona.getNombre(),
+                persona.getApellido(),
+                persona.getFechaNacimiento(),
+                domicilio
+            );
+        }
+        
+        return persona;
+        
+    }
+
+    @Override
+    public PersonaDTO transformarAPersonaDTO(Persona p) {
+        
+        PersonaDTO persona = null;
+        
+        if (p != null) {
+            DomicilioDTO domicilio = this.domiServ.transformarADomicilioDTO(p.getDomicilio());
+            
+            persona = new PersonaDTO(
+                p.getIdPersona(),
+                p.getNombre(),
+                p.getApellido(),
+                p.getFechaNacimiento(),
+                domicilio
+            );
+        }
+        
+        return persona;
+        
+    }
+    
 }
