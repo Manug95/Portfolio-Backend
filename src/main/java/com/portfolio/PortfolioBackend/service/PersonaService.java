@@ -3,6 +3,7 @@ package com.portfolio.PortfolioBackend.service;
 
 import com.portfolio.PortfolioBackend.dto.DomicilioDTO;
 import com.portfolio.PortfolioBackend.dto.EmailDTO;
+import com.portfolio.PortfolioBackend.dto.ExperienciaDTO;
 import com.portfolio.PortfolioBackend.dto.LocalidadDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
 import com.portfolio.PortfolioBackend.dto.ProvinciaDTO;
@@ -31,7 +32,7 @@ public class PersonaService implements IPersonaService {
     private PersonaRepository persoRepo;
     
     @Autowired
-    private LocalidadService localServ;
+    private ExperienciaService expServ;
     
     @Autowired
     private DomicilioService domiServ;
@@ -99,7 +100,7 @@ public class PersonaService implements IPersonaService {
     public PersonaDTO traerPersonaDTO(int id) {
         
         try {
-            Persona p = this.persoRepo.findById(id).orElse(null);
+            Persona p = this.traerPersona(id);
         
             if(p != null) {
                 
@@ -110,6 +111,9 @@ public class PersonaService implements IPersonaService {
                 PersonaDTO persona = this.transformarAPersonaDTO(p);
                 persona.setEmails(emails);
                 persona.setTelefonos(telefonos);
+                
+                ArrayList<ExperienciaDTO> experiencias = this.expServ.transformarAListaExperienciaDTO(p.getExperiencias());
+                persona.setExperiencias(experiencias);
 
                 return persona;
             }else {

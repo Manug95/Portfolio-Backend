@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,19 +32,23 @@ public class TipoEmpleo {
     private String tipo;
     
     @OneToMany(mappedBy = "tipoEmpleo")
-    private ArrayList<Experiencia> esperiencias;
+    private List<Experiencia> esperiencias;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
     public TipoEmpleo() {
     }
 
-    public TipoEmpleo(String tipo, ArrayList<Experiencia> esperiencias) {
+    public TipoEmpleo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public TipoEmpleo(String tipo, List<Experiencia> esperiencias) {
         this.tipo = tipo;
         this.esperiencias = esperiencias;
     }
 
-    public TipoEmpleo(int idTipoEmpleo, String tipo, ArrayList<Experiencia> esperiencias) {
+    public TipoEmpleo(int idTipoEmpleo, String tipo, List<Experiencia> esperiencias) {
         this.idTipoEmpleo = idTipoEmpleo;
         this.tipo = tipo;
         this.esperiencias = esperiencias;

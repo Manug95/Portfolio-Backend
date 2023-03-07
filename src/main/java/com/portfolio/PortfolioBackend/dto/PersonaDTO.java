@@ -23,6 +23,7 @@ public class PersonaDTO {
     private List<EmailDTO> emails;
     private List<TelefonoDTO> telefonos;
     private DomicilioDTO domicilio;
+    private List<ExperienciaDTO> experiencias;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -75,7 +76,19 @@ public class PersonaDTO {
         this.domicilio = domicilio;
     }
 
-    public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, List<EmailDTO> emails, List<TelefonoDTO> telefonos, DomicilioDTO domicilio) {
+    public PersonaDTO(String nombre, String apellido, LocalDate fechaNacimiento, List<EmailDTO> emails, List<TelefonoDTO> telefonos, DomicilioDTO domicilio, 
+            List<ExperienciaDTO> experiencias) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.emails = emails;
+        this.telefonos = telefonos;
+        this.domicilio = domicilio;
+        this.experiencias = experiencias;
+    }
+
+    public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, List<EmailDTO> emails, List<TelefonoDTO> telefonos, DomicilioDTO domicilio,
+            List<ExperienciaDTO> experiencias) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -83,6 +96,7 @@ public class PersonaDTO {
         this.emails = emails;
         this.telefonos = telefonos;
         this.domicilio = domicilio;
+        this.experiencias = experiencias;
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
