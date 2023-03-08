@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,6 @@ public class TipoHabilidad {
     private String nombreTipoHabilidad;
     
     @OneToMany(mappedBy = "tipoHabilidad")
-    private ArrayList<Habilidad> habilidades;
+    private List<Habilidad> habilidades;
     
 }

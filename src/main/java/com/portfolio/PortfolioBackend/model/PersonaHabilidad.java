@@ -32,5 +32,14 @@ public class PersonaHabilidad {
     private Habilidad habilidad;
     
     private short progreso;
+
+    public PersonaHabilidad() {
+    }
+
+    public PersonaHabilidad(Persona personaHab, Habilidad habilidad, short progreso) {
+        this.personaHab = personaHab;
+        this.habilidad = habilidad;
+        this.progreso = progreso;
+    }
     
 }

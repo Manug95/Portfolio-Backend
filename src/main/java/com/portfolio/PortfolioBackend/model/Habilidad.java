@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +38,35 @@ public class Habilidad {
     private TipoHabilidad tipoHabilidad;
     
     @OneToMany(mappedBy = "personaHab")
-    private ArrayList<PersonaHabilidad> personas;
+    private List<PersonaHabilidad> personas;
+    
+    //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
+
+    public Habilidad() {
+    }
+
+    public Habilidad(String nombre, TipoHabilidad tipoHabilidad) {
+        this.nombre = nombre;
+        this.tipoHabilidad = tipoHabilidad;
+    }
+
+    public Habilidad(String nombre, TipoHabilidad tipoHabilidad, ArrayList<PersonaHabilidad> personas) {
+        this.nombre = nombre;
+        this.tipoHabilidad = tipoHabilidad;
+        this.personas = personas;
+    }
+
+    public Habilidad(int idHabilidad, String nombre, TipoHabilidad tipoHabilidad) {
+        this.idHabilidad = idHabilidad;
+        this.nombre = nombre;
+        this.tipoHabilidad = tipoHabilidad;
+    }
+
+    public Habilidad(int idHabilidad, String nombre, TipoHabilidad tipoHabilidad, ArrayList<PersonaHabilidad> personas) {
+        this.idHabilidad = idHabilidad;
+        this.nombre = nombre;
+        this.tipoHabilidad = tipoHabilidad;
+        this.personas = personas;
+    }
     
 }
