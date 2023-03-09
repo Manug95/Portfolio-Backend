@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +38,7 @@ public class Proyecto {
     private String urlRepositorio;
     
     @OneToMany(mappedBy = "proyecto")
-    private ArrayList<PersonaProyecto> integrantes;
+    private List<PersonaProyecto> integrantes;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -49,6 +50,13 @@ public class Proyecto {
         this.descripcion = descripcion;
         this.urlRepositorio = urlRepositorio;
         this.integrantes = integrantes;
+    }
+    
+    public Proyecto(int idProyecto, String nombre, String descripcion, String urlRepositorio) {
+        this.idProyecto = idProyecto;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.urlRepositorio = urlRepositorio;
     }
 
     public Proyecto(int idProyecto, String nombre, String descripcion, String urlRepositorio, ArrayList<PersonaProyecto> integrantes) {
