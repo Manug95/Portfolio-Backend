@@ -9,6 +9,7 @@ import com.portfolio.PortfolioBackend.dto.HabilidadDTO;
 import com.portfolio.PortfolioBackend.dto.LocalidadDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
 import com.portfolio.PortfolioBackend.dto.ProvinciaDTO;
+import com.portfolio.PortfolioBackend.dto.ProyectoDTO;
 import com.portfolio.PortfolioBackend.dto.TelefonoDTO;
 import com.portfolio.PortfolioBackend.model.Domicilio;
 import com.portfolio.PortfolioBackend.model.Email;
@@ -50,6 +51,9 @@ public class PersonaService implements IPersonaService {
     
     @Autowired
     private EducacionService eduServ;
+    
+    @Autowired
+    private ProyectoService proyServ;
     
 //    @Autowired
 //    private IUsuarioService userServ;
@@ -128,6 +132,9 @@ public class PersonaService implements IPersonaService {
                 
                 ArrayList<EducacionDTO> educaciones = (ArrayList<EducacionDTO>) this.eduServ.traerListaDeEducacionesDeUnaPersona(p.getIdPersona());
                 persona.setEducaciones(educaciones);
+                
+                ArrayList<ProyectoDTO> proyectos = (ArrayList<ProyectoDTO>) this.proyServ.traerListaDeProyectosDeUnaPersona(p.getIdPersona());
+                persona.setProyectos(proyectos);
 
                 return persona;
             }else {
