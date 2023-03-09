@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,7 +39,7 @@ public class Educacion {
     private String logoInstitucion;
     
     @OneToMany(mappedBy = "estudiante")
-    private ArrayList<PersonaEducacion> estudiantes;
+    private List<PersonaEducacion> estudiantes;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -50,6 +51,13 @@ public class Educacion {
         this.tituloEstudios = tituloEstudios;
         this.logoInstitucion = logoInstitucion;
         this.estudiantes = estudiantes;
+    }
+    
+    public Educacion(int idEducacion, String nombreInstitucion, String tituloEstudios, String logoInstitucion) {
+        this.idEducacion = idEducacion;
+        this.nombreInstitucion = nombreInstitucion;
+        this.tituloEstudios = tituloEstudios;
+        this.logoInstitucion = logoInstitucion;
     }
 
     public Educacion(int idEducacion, String nombreInstitucion, String tituloEstudios, String logoInstitucion, ArrayList<PersonaEducacion> estudiantes) {

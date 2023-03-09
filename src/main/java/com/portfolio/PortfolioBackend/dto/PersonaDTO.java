@@ -25,6 +25,7 @@ public class PersonaDTO {
     private DomicilioDTO domicilio;
     private List<ExperienciaDTO> experiencias;
     private List<HabilidadDTO> habilidades;
+    private List<EducacionDTO> educaciones;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -89,7 +90,7 @@ public class PersonaDTO {
     }
 
     public PersonaDTO(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, List<EmailDTO> emails, List<TelefonoDTO> telefonos, DomicilioDTO domicilio,
-            List<ExperienciaDTO> experiencias, List<HabilidadDTO> habilidades) {
+            List<ExperienciaDTO> experiencias, List<HabilidadDTO> habilidades, List<EducacionDTO> educaciones) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -99,6 +100,7 @@ public class PersonaDTO {
         this.domicilio = domicilio;
         this.experiencias = experiencias;
         this.habilidades = habilidades;
+        this.educaciones = educaciones;
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------

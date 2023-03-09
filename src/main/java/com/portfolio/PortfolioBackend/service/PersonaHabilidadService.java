@@ -50,7 +50,7 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
         PersonaHabilidad persoHab = null;
         
         try {
-            this.persoHabRepo.save(ph);
+            persoHab = this.persoHabRepo.save(ph);
         }
         catch (Exception e) {
             System.out.println("----------------------Error al guardar la PersonaHabilidad Entidad------------------------");
