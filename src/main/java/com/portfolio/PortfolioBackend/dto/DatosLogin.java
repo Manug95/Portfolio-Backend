@@ -15,6 +15,7 @@ public class DatosLogin {
     private int idUsuario;
     private String nombreUsuario;
     private int idPersona;
+    private String token;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -25,11 +26,18 @@ public class DatosLogin {
         this.nombreUsuario = nombreUsuario;
         this.idPersona = idPersona;
     }
-
+    
     public DatosLogin(int idUsuario, String nombreUsuario, int idPersona) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.idPersona = idPersona;
+    }
+
+    public DatosLogin(int idUsuario, String nombreUsuario, int idPersona, String token) {
+        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
+        this.idPersona = idPersona;
+        this.token = token;
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

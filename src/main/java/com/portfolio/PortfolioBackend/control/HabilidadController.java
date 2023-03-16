@@ -8,12 +8,14 @@ import com.portfolio.PortfolioBackend.service.HabilidadService;
 import com.portfolio.PortfolioBackend.service.IHabilidadService;
 import com.portfolio.PortfolioBackend.service.IPersonaHabilidadService;
 import com.portfolio.PortfolioBackend.service.IPersonaService;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
+import com.portfolio.PortfolioBackend.service.PersonaHabilidadService;
+import com.portfolio.PortfolioBackend.service.PersonaService;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Manuel Gutiérrez
  */
+@CrossOrigin(origins = "http://localhost:4200/", exposedHeaders = {"Access-Control-Allow-Origin"})
 @RestController
 @RequestMapping(path = "/habilidades")
 public class HabilidadController {
@@ -34,10 +37,10 @@ public class HabilidadController {
     private HabilidadService habServ;
     
     @Autowired
-    private IPersonaService persoServ;
+    private PersonaService persoServ;
     
     @Autowired
-    private IPersonaHabilidadService persoHabServ;
+    private PersonaHabilidadService persoHabServ;
     
     @PostMapping("/guardar")
     public void guardarHabilidad(@RequestBody HabilidadDTO habDTO, @RequestParam("idPersona") int idPersona) {
@@ -50,9 +53,7 @@ public class HabilidadController {
             this.persoHabServ.guardarPersonaHabilidad(persona, habilidad, habDTO.getProgreso());
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la Habilidad Controller------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("--------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la Habilidad Controller");
         }
         
     }
@@ -68,9 +69,7 @@ public class HabilidadController {
             return new ResponseEntity(lista, HttpStatus.OK);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al traer las Habilidades Controller------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer las Habilidades Controller");
             
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
@@ -87,9 +86,7 @@ public class HabilidadController {
             this.persoHabServ.editarProgresoDeHabilidad(habilidad, persona, habDTO.getProgreso());
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al editar la Habilidad Controller------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al editar la Habilidad Controller");
         }
         
     }
@@ -104,9 +101,7 @@ public class HabilidadController {
             this.persoHabServ.eliminarHabilidadDePersona(habilidad, persona);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al eliminar la Habilidad de Persona Controller------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("--------------------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al eliminar la Habilidad de Persona Controller");
         }
         
     }

@@ -2,6 +2,7 @@
 package com.portfolio.PortfolioBackend.repository;
 
 import com.portfolio.PortfolioBackend.model.Usuario;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,28 +36,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     )
     public Usuario buscarUsuario(@Param("nombreUsuario") String nombreUsuario, @Param("contrasenia") String contrasenia);
     
-//    @Modifying//(flushAutomatically = true, clearAutomatically = true)
-//    @Query(nativeQuery = true,
-//           value = "UPDATE usuarios "
-//                 + "SET nombre_usuario = :nombreUsuario, contrasenia = :contrasenia, id_persona = :idPersona "
-//                 + "WHERE id_usuario = :idUsuario"
-//    )
-//    public void agregarFKPersona(@Param("idUsuario") int idUsuario, 
-//                                 @Param("nombreUsuario") String nombreUsuario,
-//                                 @Param("contrasenia") String contrasenia,
-//                                 @Param("idPersona") int idPersona
-//    );
+    public Optional<Usuario> findByNombreUsuario(String nombreUsuario);
     
-//    @Modifying
-//    @Query(nativeQuery = true,
-//           value = "UPDATE usuarios "
-//                 + "SET nombre_usuario = (?2), contrasenia = (?3), id_persona = (?4) "
-//                 + "WHERE id_usuario = (?1)"
-//    )
-//    public void agregarFKPersona(int idUsuario, 
-//                                 String nombreUsuario,
-//                                 String contrasenia,
-//                                 int idPersona
-//    );
+    public boolean existsByNombreUsuario(String nombreUsuario);
+    
+//    public boolean existsByEmail();
     
 }

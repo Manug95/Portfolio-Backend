@@ -1,15 +1,21 @@
 
 package com.portfolio.PortfolioBackend.model;
 
+import com.portfolio.PortfolioBackend.security.model.Rol;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +39,10 @@ public class Usuario {
     @Column(name = "contrasenia", length = 50)
     private String contrasena;
     
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
+    private Set<Rol> roles = new HashSet<>();
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     private Persona personaUser;
@@ -47,16 +57,24 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public Usuario(String nombreUsuario, String contrasena, Persona personaUser) {
+    public Usuario(String nombreUsuario, String contrasena, Set<Rol> roles, Persona personaUser) {
+        this.nombreUsuario = nombreUsuario;
+        this.contrasena = contrasena;
+        this.personaUser = personaUser;
+    }
+    
+    public Usuario(int idUsuario, String nombreUsuario, String contrasena, Persona personaUser) {
+        this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
         this.personaUser = personaUser;
     }
 
-    public Usuario(int idUsuario, String nombreUsuario, String contrasena, Persona personaUser) {
+    public Usuario(int idUsuario, String nombreUsuario, String contrasena, Set<Rol> roles, Persona personaUser) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
+        this.roles = roles;
         this.personaUser = personaUser;
     }
     

@@ -18,4 +18,8 @@ public interface IUsuarioService {
     
     public Usuario traerUsuario(int id);
     
+    public Usuario traerPorNombreUsuario(String nombreUsuario);
+    
+    public boolean existeNombreUsuario(String nombreUsuario);
+    
 }

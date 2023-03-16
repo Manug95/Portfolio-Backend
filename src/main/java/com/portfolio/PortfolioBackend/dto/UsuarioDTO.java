@@ -2,9 +2,9 @@
 
 package com.portfolio.PortfolioBackend.dto;
 
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Manuel Gutiérrez
@@ -18,6 +18,7 @@ public class UsuarioDTO {
     private String nombreUsuario;
     private String contrasenia;
     private Integer idPersona;
+    private Set<String> roles;
     
     //---------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------
 
@@ -29,10 +30,11 @@ public class UsuarioDTO {
         this.contrasenia = contrasenia;
     }
 
-    public UsuarioDTO(String nombreUsuario, String contrasenia, Integer idPersona) {
+    public UsuarioDTO(String nombreUsuario, String contrasenia, Integer idPersona, Set<String> roles) {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
         this.idPersona = idPersona;
+        this.roles = roles;
     }
 
     public UsuarioDTO(int idUsuario, String nombreUsuario, String contrasenia) {
@@ -41,11 +43,12 @@ public class UsuarioDTO {
         this.contrasenia = contrasenia;
     }
 
-    public UsuarioDTO(int idUsuario, String nombreUsuario, String contrasenia, Integer idPersona) {
+    public UsuarioDTO(int idUsuario, String nombreUsuario, String contrasenia, Integer idPersona,Set<String> roles) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
         this.idPersona = idPersona;
+        this.roles = roles;
     }
     
     //--------------------------------------------------------------------------------------------------------------------------------------
