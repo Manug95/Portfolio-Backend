@@ -40,7 +40,7 @@ public class EducacionController {
     private IPersonaEducacionService persoEduServ;
     
     @PostMapping("/guardar")
-    public void guardarEducacion(@RequestBody EducacionDTO eduDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> guardarEducacion(@RequestBody EducacionDTO eduDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
@@ -48,9 +48,12 @@ public class EducacionController {
             Educacion educacion = this.eduServ.guardarEducacion(eduDTO, persona);
             
             this.persoEduServ.guardarPersonaEducacion(persona, educacion, eduDTO.getFechaInicio(), eduDTO.getFechaFin());
+            
+            return new ResponseEntity(educacion.getIdEducacion(), HttpStatus.CREATED);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al guardar la Educacion Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
@@ -79,31 +82,48 @@ public class EducacionController {
     }
     
     @PutMapping("/editar")
-    public void editarEducacionDePersona(@RequestBody EducacionDTO eduDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> editarEducacionDePersona(@RequestBody EducacionDTO eduDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
-            Educacion educacion = this.eduServ.transformarAEducacion(eduDTO);
             
-            this.persoEduServ.editarPersonaEducacion(educacion, persona, eduDTO.getFechaInicio(), eduDTO.getFechaFin());
+            Educacion edu = this.eduServ.editarEducacion(eduDTO, persona);
+            
+            this.persoEduServ.editarPersonaEducacion(edu, persona, eduDTO.getFechaInicio(), eduDTO.getFechaFin());
+            
+            //si la educacion editada tiene una id diferente de la educacion que se quiso editar
+            //quiere decir que se creo una nueva xq en el frontend se modificaron el nombreInstitucion y tituloDeEstudios
+            if (edu.getIdEducacion() != eduDTO.getIdEducacion()) {
+                Educacion educacion = this.eduServ.transformarAEducacion(eduDTO);
+                
+                //en este caso de elimina la educacion anterior xq ya no esta mas relacionada con la persona
+                this.persoEduServ.eliminarEducacionDePersona(educacion, persona);
+            }
+            
+            return new ResponseEntity(edu.getIdEducacion(), HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al editar la Educacion Controller");
+            
+            return new ResponseEntity(-1, HttpStatus.NOT_MODIFIED);
         }
         
     }
     
     @DeleteMapping("/eliminar")
-    public void eliminarEducacionDePersona(@RequestParam("idEducacion") int idEducacion, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> eliminarEducacionDePersona(@RequestParam("idEducacion") int idEducacion, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
             Educacion educacion = this.eduServ.traerEducacion(idEducacion);
             
             this.persoEduServ.eliminarEducacionDePersona(educacion, persona);
+            
+            return new ResponseEntity(1, HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al eliminar la Educacion de Persona Controller");
+            return new ResponseEntity(-1, HttpStatus.NOT_FOUND);
         }
         
     }

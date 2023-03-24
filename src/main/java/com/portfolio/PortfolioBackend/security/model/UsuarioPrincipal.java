@@ -33,22 +33,22 @@ public class UsuarioPrincipal implements UserDetails {
     
     public static UsuarioPrincipal build(Usuario usuario) {
         
-//        List<GrantedAuthority> authorities = usuario.getRoles()
-//                .stream()
-//                .map( rol -> new SimpleGrantedAuthority(
-//                        rol
-//                        .getRolNombre()
-//                ))
-//                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = usuario.getRoles()
+                .stream()
+                .map( rol -> new SimpleGrantedAuthority(
+                        rol
+                        .getRolNombre()
+                ))
+                .collect(Collectors.toList());
 
-        ArrayList<Rol> list = new ArrayList<>();
-        
-        for (Rol r : usuario.getRoles()) {
-            list.add(r);
-        }
+//        ArrayList<Rol> list = new ArrayList<>();
+//        
+//        for (Rol r : usuario.getRoles()) {
+//            list.add(r);System.out.println("rol: " + r.getRolNombre());
+//        }
 
-        List<GrantedAuthority> authorities = list.stream().map(rol -> new SimpleGrantedAuthority(rol.getRolNombre())).collect(Collectors.toList());
-        
+//        List<GrantedAuthority> authorities = list.stream().map(rol -> new SimpleGrantedAuthority(rol.getRolNombre())).collect(Collectors.toList());
+        System.out.println("authorities: " + authorities.get(0).getAuthority());
         return new UsuarioPrincipal(usuario.getNombreUsuario(), usuario.getContrasena(), authorities);
     }
     

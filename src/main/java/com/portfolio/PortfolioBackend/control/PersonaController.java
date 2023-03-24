@@ -3,11 +3,14 @@ package com.portfolio.PortfolioBackend.control;
 
 import com.portfolio.PortfolioBackend.dto.DomicilioDTO;
 import com.portfolio.PortfolioBackend.dto.PersonaDTO;
+import com.portfolio.PortfolioBackend.security.dto.Login;
 import com.portfolio.PortfolioBackend.service.DomicilioService;
 import com.portfolio.PortfolioBackend.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +42,7 @@ public class PersonaController {
         PersonaDTO personaRespuesta = this.persoServ.traerPersonaDTO(id);
             
         if (personaRespuesta != null) {
-            return new ResponseEntity<>(personaRespuesta, HttpStatus.CREATED);
+            return new ResponseEntity<>(personaRespuesta, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -78,6 +81,20 @@ public class PersonaController {
             return new ResponseEntity<>("Domicilio encontrado - " + id, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("No se pudo encontrar el domicilio - " + id, HttpStatus.BAD_REQUEST);
+        }
+        
+    }
+    
+//    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("/editar")
+    public ResponseEntity<?> editarPersona(@RequestBody PersonaDTO personaDTO) {
+        
+        if (personaDTO != null) {
+            this.persoServ.editarPersona(personaDTO);
+            
+            return new ResponseEntity("{}", HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
         
     }

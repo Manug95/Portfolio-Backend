@@ -20,4 +20,10 @@ public interface PersonaEducacionRepository extends JpaRepository<PersonaEducaci
                  + "WHERE persona_estudio.id_persona = (?1)")
     public List<PersonaEducacion> traerPersonaEducacionQuery(int idPersona);
     
+    @Query(nativeQuery = true,
+           value = "SELECT id_persona "
+                 + "FROM persona_estudio "
+                 + "WHERE persona_estudio.id_educacion = (?1)")
+    public List<Integer> traerLasIdPersonaDeUnaEducacionQuery(int idEducacion);
+    
 }

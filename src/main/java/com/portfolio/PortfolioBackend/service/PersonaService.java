@@ -18,6 +18,7 @@ import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.Provincia;
 import com.portfolio.PortfolioBackend.model.Telefono;
 import com.portfolio.PortfolioBackend.repository.PersonaRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,28 +67,22 @@ public class PersonaService implements IPersonaService {
      * @return la ID de la persona nueva
      */
     @Override
-    public int inicializarPersona(/*int idUsuario, */PersonaDTO persona) {
+    public int inicializarPersona(PersonaDTO persona) {
         
         try {
             if(persona != null) {
-                
-//                Domicilio domicilio = this.domiServ.guardarDomicilioPersona(persona.getDomicilio());
-//
-//                Persona p = new Persona(
-//                    persona.getIdPersona(),
-//                    persona.getNombre(),
-//                    persona.getApellido(),
-//                    persona.getFechaNacimiento(),
-//                        domicilio
-//                );
 
                 Persona p = this.transformarAPersona(persona);
 
-                Persona personaGenerada = this.persoRepo.save(p);
+                Persona personaGenerada = this.savePersona(p);
                 
-                this.emailServ.guardarEmails(persona.getEmails(), personaGenerada);
+                if (!persona.getEmails().isEmpty()){
+                    this.emailServ.guardarEmails(persona.getEmails(), personaGenerada);
+                }
                 
-                this.telServ.guardarTelefonos(persona.getTelefonos(), personaGenerada);
+                if (!persona.getTelefonos().isEmpty()) {
+                    this.telServ.guardarTelefonos(persona.getTelefonos(), personaGenerada);
+                }
 
                 return personaGenerada.getIdPersona();
             } else {
@@ -95,9 +90,7 @@ public class PersonaService implements IPersonaService {
             }
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la Persona------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la Persona (clase PersonaService - metodo inicializarPersona)");
             return -1;
         }
         
@@ -142,8 +135,7 @@ public class PersonaService implements IPersonaService {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+            Mensaje.mensajeCatch(e, "Error al traer PersonaDTO (clase PersonaService - metodo traerPersonaDTO)");
             return null;
         }
         
@@ -165,27 +157,26 @@ public class PersonaService implements IPersonaService {
             return persona;
         }
         catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+            Mensaje.mensajeCatch(e, "Error al traer Peronsa (clase PersonaService - metodo traerPersona)");
             return null;
         }
         
     }
 
     @Override
-    public void editarPersona(PersonaDTO persona) {
+    public void editarPersona(PersonaDTO personaDTO) {
+        Persona persona;
         
-//        if(persona != null) {
-//            Persona p = new Persona(
-//                //persona.getIdPersona(),
-//                persona.getNombre(),
-//                persona.getApellido(),
-//                persona.getFechaNacimiento()
-//            );
-//        
-//            this.persoRepo.save(p);
-//            
-//        }
+        try {
+            
+            persona = this.transformarAPersona(personaDTO);
+            
+            this.savePersona(persona);
+            
+        }
+        catch (Exception e) {
+            Mensaje.mensajeCatch(e, "Error en metodo editarPersona - clase PersonaService");
+        }
         
     }
 
@@ -222,9 +213,7 @@ public class PersonaService implements IPersonaService {
             this.persoRepo.save(persona);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la cambiar domicilio------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la cambiar domicilio (clase PersonaService - metodo cambiarDomicilio)");
         }
         
     }
@@ -239,10 +228,11 @@ public class PersonaService implements IPersonaService {
             Domicilio domicilio = this.domiServ.guardarDomicilioPersona(p.getDomicilio());
             
             persona = new Persona(
-                persona.getIdPersona(),
-                persona.getNombre(),
-                persona.getApellido(),
-                persona.getFechaNacimiento(),
+                p.getIdPersona(),
+                p.getNombre(),
+                p.getApellido(),
+                p.getFechaNacimiento(),
+                p.getSobreMi(),
                 domicilio
             );
         }
@@ -264,11 +254,26 @@ public class PersonaService implements IPersonaService {
                 p.getNombre(),
                 p.getApellido(),
                 p.getFechaNacimiento(),
+                p.getSobreMi(),
                 domicilio
             );
         }
         
         return persona;
+        
+    }
+    
+    private Persona savePersona(Persona p) {
+        Persona persona;
+        
+        try {
+            persona = this.persoRepo.save(p);
+            return persona;
+        }
+        catch (Exception e) {
+            Mensaje.mensajeCatch(e, "Error savePersona en la clase PersonaService");
+            return null;
+        }
         
     }
     

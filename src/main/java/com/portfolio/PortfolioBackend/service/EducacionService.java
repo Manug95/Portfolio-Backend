@@ -6,6 +6,7 @@ import com.portfolio.PortfolioBackend.model.Educacion;
 import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.PersonaEducacion;
 import com.portfolio.PortfolioBackend.repository.EducacionRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class EducacionService implements IEducacionService {
     private PersonaEducacionService persoEduServ;
 
     @Override
-    public Educacion guardarEducacion(EducacionDTO eduDTO, Persona p) {
+    public Educacion guardarEducacion(EducacionDTO eduDTO, Persona p) throws Exception {
         
         Educacion edu = null;
         
@@ -43,9 +44,9 @@ public class EducacionService implements IEducacionService {
             
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la Educacion Entidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la Educacion Entidad");
+            
+            throw new Exception("exception en guardarEducacion");
         }
         
         return edu;
@@ -61,9 +62,7 @@ public class EducacionService implements IEducacionService {
             educacion = this.eduRepo.findById(idEducacion).orElse(null);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al traer la Educacion Entidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer la Educacion Entidad");
         }
         
         return educacion;
@@ -84,9 +83,7 @@ public class EducacionService implements IEducacionService {
             }
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al traer las Educaiones de una Persona------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-------------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer las Educaiones de una Persona");
         }
         
         return listaEducaciones;
@@ -130,18 +127,47 @@ public class EducacionService implements IEducacionService {
         return educacion;
     }
     
-    private Educacion SaveEducacion(Educacion edu) {
+    private Educacion SaveEducacion(Educacion edu) throws Exception {
         Educacion educacion = null;
         
         try {
             educacion = this.eduRepo.save(edu);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la Educacion entidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la Educacion entidad");
+            throw new Exception("exception en saveEducation");
         }
         return educacion;
+    }
+
+    @Override
+    public Educacion editarEducacion(EducacionDTO eduDTO, Persona p) throws Exception {
+        
+        Educacion edu = null;
+        
+        try {
+            
+            edu = this.eduRepo.buscarEducacionPorNombreYTituloQuery(eduDTO.getNombreInstitucion(), eduDTO.getTituloDeEstudios());
+            
+            if (edu == null) {
+                
+                edu = this.transformarAEducacion(eduDTO);
+                
+                edu.setIdEducacion(0);
+            
+                edu = this.SaveEducacion(edu);
+                
+            }
+            
+        }
+        catch (Exception e) {
+            Mensaje.mensajeCatch(e, "Error al editar la Educacion Entidad");
+            
+            throw new Exception("exception en editarEducacion");
+        }
+        
+        return edu;
+        
     }
     
 }

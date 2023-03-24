@@ -24,7 +24,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtToken {
 
-    private final String secretKey = "portfoliorabioso";
+    //@Value("${jwt.secret}")
+    private String secretKey = "portfoliorabioso";
+    //@Value("${jwt.expiration}")
+    private int expiration = 86400;
     
     public String getJWTToken(String username) {
         
@@ -36,7 +39,7 @@ public class JwtToken {
                        .builder()
                        .setSubject(username)
                        .setIssuedAt(new Date(System.currentTimeMillis()))
-                       .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                       .setExpiration(new Date(System.currentTimeMillis() + this.expiration * 1000))
                        .signWith(SignatureAlgorithm.HS512, this.secretKey.getBytes()).compact();
 
         return /*"Bearer " + */token;

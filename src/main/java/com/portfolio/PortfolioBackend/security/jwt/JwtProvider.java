@@ -21,10 +21,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProvider {
 
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.expiration}")
-    private int expiration;
+    //@Value("${jwt.secret}")
+    private String secret = "portfoliorabioso";
+    //@Value("${jwt.expiration}")
+    private int expiration = 86400;
     
     public String generateToken(Authentication auth) {
         

@@ -31,12 +31,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             String token = this.getToken(request);
             
-            if (token != null && this.jwtProvider.validarToken(token)) {
-                String nombreUsuario = this.jwtProvider.getNombreUsuarioFromToken(token);
+            if (token != null && this.jwtProvider.validarToken(token)) {//System.out.println("token valido");
+                String nombreUsuario = this.jwtProvider.getNombreUsuarioFromToken(token);//System.out.println("nombreUsuario: " + nombreUsuario);
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(nombreUsuario);
                 UsernamePasswordAuthenticationToken auth = 
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                
+                //System.out.println("isAuthenticated: " + auth.isAuthenticated());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
             

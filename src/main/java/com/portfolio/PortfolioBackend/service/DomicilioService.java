@@ -9,6 +9,7 @@ import com.portfolio.PortfolioBackend.model.Domicilio;
 import com.portfolio.PortfolioBackend.model.Localidad;
 import com.portfolio.PortfolioBackend.model.Provincia;
 import com.portfolio.PortfolioBackend.repository.DomicilioRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +36,7 @@ public class DomicilioService implements IDomicilioService {
             
         }
         catch (Exception e) {
-            System.out.println("---------------------Error al guardar el Domicilio Entidad-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar el Domicilio Entidad");
             domi = null;
         }
         
@@ -67,9 +66,7 @@ public class DomicilioService implements IDomicilioService {
         }
         catch (Exception e) {
             domicilio = null;
-            System.out.println("---------------------Error al traer el Domicilio-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer el Domicilio");
         }
         
         return domicilio;
@@ -87,9 +84,7 @@ public class DomicilioService implements IDomicilioService {
         }
         catch (Exception e) {
             domicilio = null;
-            System.out.println("---------------------Error al traer el Domicilio-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer el Domicilio");
         }
         
         return domicilio;
@@ -129,9 +124,7 @@ public class DomicilioService implements IDomicilioService {
         }
         catch (Exception e) {
             domicilio = null;
-            System.out.println("---------------------Error al guardar el Domicilio Persona-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar el Domicilio Persona");
         }
 
         return domicilio;
@@ -151,9 +144,7 @@ public class DomicilioService implements IDomicilioService {
             this.guardarDomicilioEntidad(domicilio); 
         }
         catch (Exception e) {
-            System.out.println("---------------------Error al modificar el Domicilio Entidad-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al modificar el Domicilio Entidad");
         }
         
     }
