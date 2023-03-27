@@ -51,7 +51,7 @@ public class ExperienciaService implements IExperienciaService {
     @Override
     public Experiencia guardarExperiencia(ExperienciaDTO expDTO, Persona p) {
         
-        Experiencia exp = null;
+        Experiencia exp;
         
         try {
             //System.out.println("idExperiencia: " + expDTO.getIdExperiencia());
@@ -59,7 +59,7 @@ public class ExperienciaService implements IExperienciaService {
 //            
 //            exp = this.expRepo.save(exp);
 
-            this.crearExperienciaNueva(expDTO, p);
+            exp = this.crearExperienciaNueva(expDTO, p);
             
         }
         catch (Exception e) {
@@ -76,12 +76,13 @@ public class ExperienciaService implements IExperienciaService {
     }
 
     @Override
-    public void editarExperiencia(ExperienciaDTO exp, Persona p) {
+    public Experiencia editarExperiencia(ExperienciaDTO exp, Persona p) {
         
         if (exp.getIdExperiencia() != 0) {
-            this.guardarExperiencia(exp, p);
+            return this.guardarExperiencia(exp, p);
         } else {
             System.out.println("No se puede editar una Experiencia sin ID");
+            return null;
         }
         
     }
@@ -174,9 +175,9 @@ public class ExperienciaService implements IExperienciaService {
         
     }
     
-    private void crearExperienciaNueva(ExperienciaDTO expDTO, Persona p) throws Exception {
+    private Experiencia crearExperienciaNueva(ExperienciaDTO expDTO, Persona p) throws Exception {
         
-        Experiencia exp;
+        Experiencia exp = null;
         
         if (expDTO != null) {
             exp = new Experiencia();
@@ -204,7 +205,7 @@ public class ExperienciaService implements IExperienciaService {
             
         }
         
-        //return exp;
+        return exp;
         
     }
     

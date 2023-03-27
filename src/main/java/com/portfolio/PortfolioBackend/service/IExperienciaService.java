@@ -16,7 +16,7 @@ public interface IExperienciaService {
     
     public Experiencia guardarExperiencia(ExperienciaDTO exp, Persona p);
     
-    public void editarExperiencia(ExperienciaDTO exp, Persona p);
+    public Experiencia editarExperiencia(ExperienciaDTO exp, Persona p);
     
     public void eliminarExperiencia(ExperienciaDTO exp, Persona p);
     

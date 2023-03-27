@@ -2,6 +2,7 @@
 package com.portfolio.PortfolioBackend.control;
 
 import com.portfolio.PortfolioBackend.dto.ExperienciaDTO;
+import com.portfolio.PortfolioBackend.model.Experiencia;
 import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.service.ExperienciaService;
 import com.portfolio.PortfolioBackend.service.IExperienciaService;
@@ -38,15 +39,20 @@ public class ExperienciaController {
     private PersonaService persoServ;
     
     @PostMapping("/guardar")
-    public void guardarExperiencia(@RequestBody ExperienciaDTO expDTO) {
+    public ResponseEntity<?> guardarExperiencia(@RequestBody ExperienciaDTO expDTO) {
+        
+        Experiencia exp;
         
         try {
             Persona p = this.persoServ.traerPersona(expDTO.getIdPersona());
             
-            this.expServ.guardarExperiencia(expDTO, p);
+            exp = this.expServ.guardarExperiencia(expDTO, p);
+            
+            return new ResponseEntity(exp.getIdExperiencia(), HttpStatus.CREATED);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al guardar la experiencia en ExperienciaController");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
@@ -69,27 +75,35 @@ public class ExperienciaController {
     }
     
     @PutMapping("/editar")
-    public void editarExperiencia(@RequestBody ExperienciaDTO expDTO) {
+    public ResponseEntity<?> editarExperiencia(@RequestBody ExperienciaDTO expDTO) {
+        
+        Experiencia exp;
         
         try {
             Persona p = this.persoServ.traerPersona(expDTO.getIdPersona());
             
-            this.expServ.editarExperiencia(expDTO, p);
+            exp = this.expServ.editarExperiencia(expDTO, p);
+            
+            return new ResponseEntity(exp.getIdExperiencia(), HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al editar la experiencia en ExperienciaController");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
     
     @DeleteMapping("/eliminar")
-    public void eliminarExperiencia(@RequestParam("idExp") int idExp) {
+    public ResponseEntity<?> eliminarExperiencia(@RequestParam("idExp") int idExp) {
         
         try{
             this.expServ.eliminarExperiencia(idExp);
+            
+            return new ResponseEntity(1, HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al eliminar la experiencia en ExperienciaController");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
