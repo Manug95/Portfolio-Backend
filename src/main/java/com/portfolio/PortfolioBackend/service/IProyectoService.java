@@ -22,4 +22,8 @@ public interface IProyectoService {
     
     public ProyectoDTO transformarAProyectoDTO(Proyecto proy, LocalDate fechaIni, LocalDate fechaFin);
     
+//    public void eliminarProyecto(int idProyecto);
+//    
+    public Proyecto editarProyecto(ProyectoDTO proyDTO);
+    
 }

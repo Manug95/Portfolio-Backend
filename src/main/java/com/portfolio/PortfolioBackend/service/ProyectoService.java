@@ -6,6 +6,7 @@ import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.PersonaProyecto;
 import com.portfolio.PortfolioBackend.model.Proyecto;
 import com.portfolio.PortfolioBackend.repository.ProyectoRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,11 +139,28 @@ public class ProyectoService implements IProyectoService {
             proyecto = this.proyRepo.save(proy);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la Proyecto entidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la Proyecto entidad");
         }
         return proyecto;
+    }
+
+    @Override
+    public Proyecto editarProyecto(ProyectoDTO proyDTO) {
+        
+        Proyecto proy;
+        
+        try {
+            proy = this.transformarAProyecto(proyDTO);
+        
+            proy = this.SaveProyecto(proy);
+        }
+        catch (Exception e) {
+            Mensaje.mensajeCatch(e, "Error al Editar Proyecto en ProyetoService");
+            proy = null;
+        }
+        
+        return proy;
+        
     }
     
 }

@@ -3,6 +3,7 @@ package com.portfolio.PortfolioBackend.control;
 
 import com.portfolio.PortfolioBackend.dto.ProyectoDTO;
 import com.portfolio.PortfolioBackend.model.Persona;
+import com.portfolio.PortfolioBackend.model.PersonaProyecto;
 import com.portfolio.PortfolioBackend.model.Proyecto;
 import com.portfolio.PortfolioBackend.service.IPersonaProyectoService;
 import com.portfolio.PortfolioBackend.service.IPersonaService;
@@ -43,17 +44,29 @@ public class ProyectoController {
     private PersonaProyectoService persoProyServ;
     
     @PostMapping("/guardar")
-    public void guardarProyecto(@RequestBody ProyectoDTO proyDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<Integer> guardarProyecto(@RequestBody ProyectoDTO proyDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
             
             Proyecto proyecto = this.proyServ.guardarProyecto(proyDTO, persona);
             
-            this.persoProyServ.guardarPersonaProyecto(persona, proyecto, proyDTO.getFechaInicio(), proyDTO.getFechaFin());
+            //si proyecto es null no se pudo guardar
+            if (proyecto == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            PersonaProyecto persoProy = this.persoProyServ.guardarPersonaProyecto(persona, proyecto, proyDTO.getFechaInicio(), proyDTO.getFechaFin());
+            
+            if (persoProy == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            return new ResponseEntity(proyecto.getIdProyecto(), HttpStatus.CREATED);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al guardar la Proyecto Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
@@ -77,31 +90,48 @@ public class ProyectoController {
     }
     
     @PutMapping("/editar")
-    public void editarProyectoDePersona(@RequestBody ProyectoDTO proyDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<Integer> editarProyectoDePersona(@RequestBody ProyectoDTO proyDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
-            Proyecto proyecto = this.proyServ.transformarAProyecto(proyDTO);
+//            Proyecto proyecto = this.proyServ.transformarAProyecto(proyDTO);
             
-            this.persoProyServ.editarPersonaProyecto(proyecto, persona, proyDTO.getFechaInicio(), proyDTO.getFechaFin());
+            Proyecto proyecto = this.proyServ.editarProyecto(proyDTO);
+            
+            if (proyecto == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            PersonaProyecto persoProy = this.persoProyServ.editarPersonaProyecto(proyecto, persona, proyDTO.getFechaInicio(), proyDTO.getFechaFin());
+            
+            if (persoProy == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            return new ResponseEntity(1, HttpStatus.OK);
+            
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al editar la Proyecto Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
     
     @DeleteMapping("/eliminar")
-    public void eliminarProyectoDePersona(@RequestParam("idProyecto") int idProyecto, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<Integer> eliminarProyectoDePersona(@RequestParam("idProyecto") int idProyecto, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
             Proyecto proyecto = this.proyServ.traerProyecto(idProyecto);
             
             this.persoProyServ.eliminarProyectoDePersona(proyecto, persona);
+            
+            return new ResponseEntity(1, HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al eliminar la Proyecto de Persona Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }

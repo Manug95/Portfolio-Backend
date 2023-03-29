@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface IPersonaProyectoService {
     
-    public void guardarPersonaProyecto(Persona perso, Proyecto proy, LocalDate fechaIni, LocalDate fechaFin);
+    public PersonaProyecto guardarPersonaProyecto(Persona perso, Proyecto proy, LocalDate fechaIni, LocalDate fechaFin);
     
     public List<PersonaProyecto> traerListaDeProyectosDeUnaPersona(int idPersona);
     
-    public void editarPersonaProyecto(Proyecto proy, Persona perso, LocalDate fechaIni, LocalDate fechaFin);
+    public PersonaProyecto editarPersonaProyecto(Proyecto proy, Persona perso, LocalDate fechaIni, LocalDate fechaFin);
     
     public void eliminarProyectoDePersona(Proyecto proy, Persona perso);
     

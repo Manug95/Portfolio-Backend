@@ -6,6 +6,7 @@ import com.portfolio.PortfolioBackend.model.PersonaProyecto;
 import com.portfolio.PortfolioBackend.model.PersonaProyectoID;
 import com.portfolio.PortfolioBackend.model.Proyecto;
 import com.portfolio.PortfolioBackend.repository.PersonaProyectoRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class PersonaProyectoService implements IPersonaProyectoService {
     private PersonaProyectoRepository persoProyRepo;
 
     @Override
-    public void guardarPersonaProyecto(Persona perso, Proyecto proy, LocalDate fechaIni, LocalDate fechaFin) {
+    public PersonaProyecto guardarPersonaProyecto(Persona perso, Proyecto proy, LocalDate fechaIni, LocalDate fechaFin) {
         
         PersonaProyecto persoProy;
         
@@ -30,13 +31,16 @@ public class PersonaProyectoService implements IPersonaProyectoService {
             
             persoProy = new PersonaProyecto(perso, proy, fechaIni, fechaFin);
             
-            this.savePersonaProyecto(persoProy);
+            persoProy = this.savePersonaProyecto(persoProy);
         }
         catch (Exception e) {
             System.out.println("----------------------Error al guardar la PersonaProyecto Entidad------------------------");
             System.out.println(e.getMessage());
             System.out.println("-----------------------------------------------------------------------------------------");
+            persoProy = null;
         }
+        
+        return persoProy;
         
     }
 
@@ -60,17 +64,18 @@ public class PersonaProyectoService implements IPersonaProyectoService {
     }
 
     @Override
-    public void editarPersonaProyecto(Proyecto proy, Persona perso, LocalDate fechaIni, LocalDate fechaFin) {
+    public PersonaProyecto editarPersonaProyecto(Proyecto proy, Persona perso, LocalDate fechaIni, LocalDate fechaFin) {
         
         try {
             PersonaProyecto persoProy = new PersonaProyecto(perso, proy, fechaIni, fechaFin);
             
-            this.savePersonaProyecto(persoProy);
+            persoProy = this.savePersonaProyecto(persoProy);
+            
+            return persoProy;
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al editar PersonaProyecto---------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("--------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al editar PersonaProyecto en PersonaProyectoService");
+            return null;
         }
         
     }
