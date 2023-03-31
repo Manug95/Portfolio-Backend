@@ -7,6 +7,7 @@ import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.PersonaHabilidad;
 import com.portfolio.PortfolioBackend.model.TipoHabilidad;
 import com.portfolio.PortfolioBackend.repository.HabilidadRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +136,26 @@ public class HabilidadService implements IHabilidadService {
             System.out.println("-----------------------------------------------------------------------------------");
         }
         return hab;
+    }
+
+    @Override
+    public Habilidad editarHabilidad(HabilidadDTO habDTO) {
+        
+        Habilidad hab;
+        
+        try {
+            hab = this.transformarAHabilidad(habDTO);
+            
+            hab = this.SaveHabilidad(hab);
+            
+            return hab;
+            
+        }
+        catch (Exception e) {
+            Mensaje.mensajeCatch(e, "Error al editarHabilidad en HabilidadService");
+            return null;
+        }
+        
     }
     
 }

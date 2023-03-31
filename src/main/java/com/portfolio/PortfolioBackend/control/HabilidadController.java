@@ -4,6 +4,7 @@ package com.portfolio.PortfolioBackend.control;
 import com.portfolio.PortfolioBackend.dto.HabilidadDTO;
 import com.portfolio.PortfolioBackend.model.Habilidad;
 import com.portfolio.PortfolioBackend.model.Persona;
+import com.portfolio.PortfolioBackend.model.PersonaHabilidad;
 import com.portfolio.PortfolioBackend.service.HabilidadService;
 import com.portfolio.PortfolioBackend.service.IHabilidadService;
 import com.portfolio.PortfolioBackend.service.IPersonaHabilidadService;
@@ -43,17 +44,29 @@ public class HabilidadController {
     private PersonaHabilidadService persoHabServ;
     
     @PostMapping("/guardar")
-    public void guardarHabilidad(@RequestBody HabilidadDTO habDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> guardarHabilidad(@RequestBody HabilidadDTO habDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
             
             Habilidad habilidad = this.habServ.guardarHabilidad(habDTO, persona);
             
-            this.persoHabServ.guardarPersonaHabilidad(persona, habilidad, habDTO.getProgreso());
+            //si habilidad es null no se pudo guardar
+            if (habilidad == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            PersonaHabilidad persoHab = this.persoHabServ.guardarPersonaHabilidad(persona, habilidad, habDTO.getProgreso());
+            
+            if (persoHab == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            return new ResponseEntity(habilidad.getIdHabilidad(), HttpStatus.CREATED);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al guardar la Habilidad Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
@@ -77,31 +90,47 @@ public class HabilidadController {
     }
     
     @PutMapping("/editar")
-    public void editarHabilidadDePersona(@RequestBody HabilidadDTO habDTO, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> editarHabilidadDePersona(@RequestBody HabilidadDTO habDTO, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
-            Habilidad habilidad = this.habServ.transformarAHabilidad(habDTO);
+//            Habilidad habilidad = this.habServ.transformarAHabilidad(habDTO);
+            Habilidad habilidad = this.habServ.editarHabilidad(habDTO);
             
-            this.persoHabServ.editarProgresoDeHabilidad(habilidad, persona, habDTO.getProgreso());
+            if (habilidad == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            PersonaHabilidad persoHab = this.persoHabServ.editarProgresoDeHabilidad(habilidad, persona, habDTO.getProgreso());
+            
+            if (persoHab == null) {
+                return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
+            }
+            
+            return new ResponseEntity(1, HttpStatus.OK);
+            
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al editar la Habilidad Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }
     
     @DeleteMapping("/eliminar")
-    public void eliminarHabilidadDePersona(@RequestParam("idHabilidad") int idHabilidad, @RequestParam("idPersona") int idPersona) {
+    public ResponseEntity<?> eliminarHabilidadDePersona(@RequestParam("idHabilidad") int idHabilidad, @RequestParam("idPersona") int idPersona) {
         
         try {
             Persona persona = this.persoServ.traerPersona(idPersona);
             Habilidad habilidad = this.habServ.traerHabilidad(idHabilidad);
             
             this.persoHabServ.eliminarHabilidadDePersona(habilidad, persona);
+            
+            return new ResponseEntity(1,HttpStatus.OK);
         }
         catch (Exception e) {
             Mensaje.mensajeCatch(e, "Error al eliminar la Habilidad de Persona Controller");
+            return new ResponseEntity(-1, HttpStatus.BAD_REQUEST);
         }
         
     }

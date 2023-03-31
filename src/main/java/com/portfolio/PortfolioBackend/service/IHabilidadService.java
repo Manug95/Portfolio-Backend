@@ -17,4 +17,6 @@ public interface IHabilidadService {
     
     public List<HabilidadDTO> traerListaDeHabilidadesDeUnaPersona(int idPersona);
     
+    public Habilidad editarHabilidad(HabilidadDTO habDTO);
+    
 }

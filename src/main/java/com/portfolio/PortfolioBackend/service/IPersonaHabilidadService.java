@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface IPersonaHabilidadService {
     
-    public void guardarPersonaHabilidad(Persona p, Habilidad h, short progreso);
+    public PersonaHabilidad guardarPersonaHabilidad(Persona p, Habilidad h, short progreso);
     
     public List<PersonaHabilidad> traerListaDeHabilidadesDeUnaPersona(int idPersona);
     
-    public void editarProgresoDeHabilidad(Habilidad h, Persona p, short progreso);
+    public PersonaHabilidad editarProgresoDeHabilidad(Habilidad h, Persona p, short progreso);
     
     public void eliminarHabilidadDePersona(Habilidad h, Persona p);
     

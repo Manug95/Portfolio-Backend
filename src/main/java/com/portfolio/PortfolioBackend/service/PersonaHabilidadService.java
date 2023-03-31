@@ -8,6 +8,7 @@ import com.portfolio.PortfolioBackend.model.Persona;
 import com.portfolio.PortfolioBackend.model.PersonaHabilidad;
 import com.portfolio.PortfolioBackend.model.PersonaHabilidadID;
 import com.portfolio.PortfolioBackend.repository.PersonaHabilidadRepository;
+import com.portfolio.PortfolioBackend.utils.Mensaje;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
     private PersonaHabilidadRepository persoHabRepo;
 
     @Override
-    public void guardarPersonaHabilidad(Persona p, Habilidad h, short progreso) {
+    public PersonaHabilidad guardarPersonaHabilidad(Persona p, Habilidad h, short progreso) {
         
         //PersonaHabilidadID persoHabID;
         PersonaHabilidad persoHab;
@@ -32,16 +33,14 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
             
             persoHab = new PersonaHabilidad(p, h, progreso);
             
-            this.savePersonaHabilidad(persoHab);
+            persoHab = this.savePersonaHabilidad(persoHab);
+            
+            return persoHab;
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la PersonaHabilidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("----------------------------------------------------------------------------------");
-            persoHab = null;
+            Mensaje.mensajeCatch(e, "Error al guardar la PersonaHabilidad en PersonaHabilidadService");
+            return null;
         }
-        
-        //return persoHab;
         
     }
 
@@ -53,9 +52,7 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
             persoHab = this.persoHabRepo.save(ph);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al guardar la PersonaHabilidad Entidad------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("------------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al guardar la PersonaHabilidad Entidad en PersonaHabilidadService");
         }
         
         return persoHab;
@@ -70,9 +67,7 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
             listaHabilidades = this.persoHabRepo.traerPersonaHabilidadesQuery(idPersona);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al traer la lista Habilidades Query---------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("------------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al traer la lista Habilidades Query en PersonaHabilidadService");
             listaHabilidades = null;
         }
         
@@ -80,17 +75,18 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
     }
 
     @Override
-    public void editarProgresoDeHabilidad(Habilidad hab, Persona perso, short progreso) {
+    public PersonaHabilidad editarProgresoDeHabilidad(Habilidad hab, Persona perso, short progreso) {
         
         try {
             PersonaHabilidad persoHab = new PersonaHabilidad(perso, hab, progreso);
             
-            this.savePersonaHabilidad(persoHab);
+            persoHab = this.savePersonaHabilidad(persoHab);
+            
+            return persoHab;
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al editar el progreso de la Habilidad---------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("--------------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al editar el progreso de la Habilidad en PersonaHabilidadService");
+            return null;
         }
         
     }
@@ -104,9 +100,7 @@ public class PersonaHabilidadService implements IPersonaHabilidadService {
             this.persoHabRepo.deleteById(id);
         }
         catch (Exception e) {
-            System.out.println("----------------------Error al eliminar la Habilidad de Persona------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("---------------------------------------------------------------------------------------");
+            Mensaje.mensajeCatch(e, "Error al eliminar la Habilidad de Persona en PersonaHabilidadService");
         }
         
     }
